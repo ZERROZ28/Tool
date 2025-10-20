@@ -1,26 +1,53 @@
-Générateur de texte ultra‑personnalisable
+# Générateur de texte ultra‑personnalisable
 
-Cet outil est un générateur visuel interactif dédié à la création de textes artistiques entièrement modulables en temps réel. Pensé pour les designers, directeurs artistiques, etc... Il permet de transformer un simple mot ou phrase en objet graphique expressif prêt à être exporté.
+Cet outil est un générateur visuel interactif dédié à la **création de
+textes artistiques** entièrement modulables en temps réel. Pensé pour
+les designers, directeurs artistiques, etc., il permet de transformer un
+simple mot ou phrase en **objet graphique expressif prêt à être
+exporté**.
 
-Fonctionnalités principales:
-Saisie libre de texte (mot, phrase, slogan, titre)
-Contrôles en temps réel sur :
-Couleurs dynamiques
-Épaisseur de trait / volume / graisse variable
-Hauteur / tracking / étirement / distortion
-Spirales typographiques / courbure libre
-Effets de vibration / bruit / instabilité organique
-Effet 3D simulé (profondeur / ombre / extrusion)
-Flou animé ou statique (glow / blur / fade)
-Système de presets & random intelligent
+------------------------------------------------------------------------
 
-Export haute qualité : PNG, JPG, SVG (vectoriel)
+## Fonctionnalités principales
 
-Utilisation:
-Création d’affiches / visuels / titres impactants
-Génération d’identités visuelles typographiques ultra expressives
-Assets motion, web, social media, print, scénographie
-Moodboards concept forts en 5s chrono
+-   **Saisie libre de texte** (mot, phrase, slogan, titre)
 
-Objectif créatif:
-Proposer un outil typographique expressif, permettant un niveau de personnalisation complet mais accessible.
+-   **Contrôles en temps réel** sur :
+
+    -   Couleurs dynamiques
+    -   Épaisseur de trait / volume / graisse variable
+    -   Hauteur / tracking / étirement / distortion
+    -   Spirales typographiques / courbure libre
+    -   Effets de vibration / bruit / instabilité organique
+    -   Effet 3D simulé (profondeur / ombre / extrusion)
+    -   Flou animé ou statique (glow / blur / fade)
+
+-   **Système de presets & random intelligent**
+
+-   **Export haute qualité** : PNG, JPG, SVG (vectoriel)
+
+------------------------------------------------------------------------
+
+## Utilisation
+
+-   Création d'affiches / visuels / titres impactants
+-   Génération d'identités visuelles typographiques ultra expressives
+-   Assets pour motion, web, réseaux sociaux, print, scénographie
+-   Moodboards et concepts forts en quelques secondes
+
+------------------------------------------------------------------------
+
+## Objectif créatif
+
+Proposer un **outil typographique expressif**, permettant un niveau de
+personnalisation complet mais accessible --- un pont entre l'instrument
+visuel et l'outil de production pour créatifs.
+
+------------------------------------------------------------------------
+
+## Prochaines étapes (suggestions)
+
+-   Prototype p5.js interactif (UI + export SVG/PNG)
+-   Ajout d'un système de seeds et presets partageables
+-   Mode export vidéo (MP4 / GIF) et séquences image
+-   Intégration MIDI / audio-réactivité pour performance live
