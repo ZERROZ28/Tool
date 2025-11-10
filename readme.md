@@ -6,13 +6,18 @@ les designers, directeurs artistiques, etc., il permet de transformer un
 simple mot ou phrase en **objet graphique expressif prêt à être
 exporté**.
 
-------------------------------------------------------------------------
+## Références
 
-## Fonctionnalités principales
+- [Type Tools](https://www.type-tools.com)
+- [NoDesignFoundry](https://nodesignfoundry.com)
+- [Velvetyne](https://velvetyne.fr)
+- [pointilliser](https://pointilliser.elwyn.co)
+
+## Snippets
 
 -   **Saisie libre de texte** (mot, phrase, slogan, titre)
 
--   **Contrôles en temps réel** sur :
+-   **Contrôles en temps réel sur :**
 
     -   Couleurs dynamiques
     -   Épaisseur de trait / volume / graisse variable
@@ -22,11 +27,72 @@ exporté**.
     -   Effet 3D simulé (profondeur / ombre / extrusion)
     -   Flou animé ou statique (glow / blur / fade)
 
--   **Système de presets & random intelligent**
+-   **Système de presets & random**
 
 -   **Export haute qualité** : PNG, JPG, SVG (vectoriel)
 
-------------------------------------------------------------------------
+**Quelques snippets à tester :**
+
+*1. Vibration*
+
+```
+const vibration = document.getElementById('vibration');
+vibration.addEventListener('input', () => preview.style.setProperty('--vib', `${vibration.value}px`));
+```
+*2. Flou*
+
+```
+const blur = document.getElementById('blur');
+blur.addEventListener('input', () => {
+  const v = blur.value;
+  preview.style.filter = `blur(${v}px)`;
+  // intensifier le glow en même temps
+  preview.style.textShadow = v > 0 ? `0 0 ${v*6}px ${getComputedStyle(preview).getPropertyValue('--c2') || '#00ffff'}` : 'none';
+});
+```
+
+*3. 3D, Profondeur*
+
+```
+const depth = document.getElementById('depth');
+
+// fonction utilitaire pour interpoler entre deux couleurs hex
+function lerpColor(a, b, amount) {
+  const ah = parseInt(a.replace('#', ''), 16);
+  const ar = (ah >> 16) & 0xff, ag = (ah >> 8) & 0xff, ab = ah & 0xff;
+  const bh = parseInt(b.replace('#', ''), 16);
+  const br = (bh >> 16) & 0xff, bg = (bh >> 8) & 0xff, bb = bh & 0xff;
+  const rr = Math.round(ar + amount * (br - ar));
+  const rg = Math.round(ag + amount * (bg - ag));
+  const rb = Math.round(ab + amount * (bb - ab));
+  return `rgb(${rr},${rg},${rb})`;
+}
+
+function updateDepthEffect() {
+  const d = +depth.value;
+  const c1 = color1.value;
+  const c2 = color2.value;
+  const layers = [];
+
+  for (let i = 1; i <= d; i++) {
+    const t = i / d; // interpolation
+    const c = lerpColor(c1, c2, t);
+    const alpha = 0.8 - t * 0.7; // plus transparent avec la profondeur
+    layers.push(`${i}px ${i}px 0 rgba(${hexToRgbString(c)}, ${alpha})`);
+  }
+  preview.style.textShadow = layers.join(',');
+}
+
+// convertit rgb(...) en version sans alpha pour lerpColor
+function hexToRgbString(rgbStr) {
+  // extrait les chiffres de "rgb(r,g,b)"
+  const match = rgbStr.match(/\d+/g);
+  return match.slice(0,3).join(',');
+}
+
+// Événements
+[depth, color1, color2].forEach(el => el.addEventListener('input', updateDepthEffect));
+```
 
 ## Utilisation
 

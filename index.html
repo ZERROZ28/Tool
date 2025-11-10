@@ -2,17 +2,106 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Sketch</title>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
 
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
   </head>
 
   <body>
+    <h1>Type$hit</h1>
+    <input
+      id="inputText"
+      type="text"
+      value="Text"
+      style="width: 100%; font-size: 1.1rem; padding: 0.5rem"
+    />
+    <div
+      id="preview"
+      style="margin-top: 2rem; font-size: 4rem; text-align: center"
+    >
+      Text
+    </div>
+
+    <div>
+      <label
+        >Graisse :
+        <input
+          id="weight"
+          type="range"
+          min="100"
+          max="900"
+          step="10"
+          value="400"
+      /></label>
+    </div>
+    <br />
+    <div>
+      <label
+        >Tracking :
+        <input
+          id="tracking"
+          type="range"
+          min="-0.1"
+          max="0.3"
+          step="0.01"
+          value="0"
+      /></label>
+    </div>
+    <br />
+    <div>
+      <label
+        >Couleur 1: <input id="color1" type="color" value="#ff004c"
+      /></label>
+      <label
+        >Couleur 2: <input id="color2" type="color" value="#00ffff"
+      /></label>
+    </div>
+    <br />
+    <div>
+      <label
+        >Vitesse dégradé:
+        <input id="speed" type="range" min="1" max="20" step="0.5" value="6"
+      /></label>
+    </div>
+    <br />
+    <div>
+      <label
+        >Flou / Glow :
+        <input id="blur" type="range" min="0" max="10" step="0.1" value="0"
+      /></label>
+    </div>
+    <br />
+    <div>
+      <label
+        >Vibration (px) :
+        <input id="vibration" type="range" min="0" max="8" step="0.1" value="0"
+      /></label>
+    </div>
+    <br />
+    <div class="controls">
+      <label for="fontSelect">Choisir une police :</label>
+      <select id="fontSelect">
+        <option value="'Roboto Flex', sans-serif">Roboto Flex</option>
+        <option value="'Playfair Display', serif">Playfair Display</option>
+        <option value="'Oswald', sans-serif">Oswald</option>
+        <option value="'Monoton', cursive">Monoton</option>
+        <option value="'Pacifico', cursive">Pacifico</option>
+        <option value="'Press Start 2P', monospace">Press Start 2P</option>
+      </select>
+  
+      <label for="scaleY">Étirement vertical :</label>
+      <input id="scaleY" type="range" min="0.5" max="2" step="0.05" value="1">
+    </div>
+
     <script src="sketch.js"></script>
   </body>
 </html>

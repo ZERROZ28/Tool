@@ -1,3 +1,6 @@
+body { font-family: 'Roboto Flex', system-ui, sans-serif; background:#ffffff; color:#000000; padding:2rem; }
+  #preview { font-variation-settings: 'wght' 400; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -6,3 +9,20 @@ html, body {
 canvas {
   display: block;
 }
+
+#preview {
+  background: linear-gradient(90deg, var(--c1,#ff004c), var(--c2,#00ffff));
+  background-size: 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: colorShift 6s linear infinite;
+}
+@keyframes colorShift { to { background-position: 400% 0; } }
+
+@keyframes vibrate {
+  0%,100% { transform: translate(0,0) scaleY(var(--scaleY,1)); }
+  25% { transform: translate(var(--vib), calc(var(--vib)*-1)) scaleY(var(--scaleY,1)); }
+  50% { transform: translate(calc(var(--vib)*-1), var(--vib)) scaleY(var(--scaleY,1)); }
+  75% { transform: translate(var(--vib), var(--vib)) scaleY(var(--scaleY,1)); }
+}
+#preview { animation-name: colorShift, vibrate; animation-duration: var(--speed,6s), 0.08s; animation-iteration-count: infinite, infinite; animation-timing-function: linear, steps(4,end); }
