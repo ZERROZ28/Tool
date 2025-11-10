@@ -94,6 +94,26 @@ function hexToRgbString(rgbStr) {
 [depth, color1, color2].forEach(el => el.addEventListener('input', updateDepthEffect));
 ```
 
+*4 Librairie de fonts*
+```
+const scaleYInput = document.getElementById('scaleY');
+const fontSelect = document.getElementById('fontSelect');
+
+let scaleYValue = 1;
+let selectedFont = "'Roboto Flex', sans-serif";
+// Met à jour la police
+fontSelect.addEventListener('change', () => {
+  selectedFont = fontSelect.value;
+  preview.style.fontFamily = selectedFont;
+});
+
+// Fonction de mise à jour
+function updateTransform() {
+  preview.style.transform = `scaleY(${scaleYValue})`;
+}
+``````
+
+
 ## Utilisation
 
 -   Création d'affiches / visuels / titres impactants

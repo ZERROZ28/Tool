@@ -44,6 +44,7 @@ const fontSelect = document.getElementById('fontSelect');
 
 let scaleYValue = 1;
 let selectedFont = "'Roboto Flex', sans-serif";
+
 // Met à jour la police
 fontSelect.addEventListener('change', () => {
   selectedFont = fontSelect.value;
