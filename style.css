@@ -10,6 +10,10 @@ canvas {
   display: block;
 }
 
+#inputText{
+  width: 100%; font-size: 1.1rem; padding: 0.5rem
+}
+
 #preview {
   background: linear-gradient(90deg, var(--c1,#ff004c), var(--c2,#00ffff));
   background-size: 400%;
