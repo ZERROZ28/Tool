@@ -1,32 +1,69 @@
-body { font-family: 'Roboto Flex', system-ui, sans-serif; background:#ffffff; color:#000000; padding:2rem; }
-  #preview { font-variation-settings: 'wght' 400; }
-
-html, body {
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
   margin: 0;
-  padding: 0;
+  display: flex;
 }
 
-canvas {
+.panel {
+  width: 320px;
+  padding: 20px;
+  background: #1c1c1c;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid #333;
+}
+
+.panel label {
   display: block;
+  margin-top: 14px;
+  font-size: 0.8rem;
+  opacity: 0.7;
 }
 
-#inputText{
-  width: 100%; font-size: 1.1rem; padding: 0.5rem
+.panel input,
+.panel textarea,
+.panel select {
+  width: 100%;
+  margin-top: 5px;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+  background: #2a2a2a;
+  color: white;
 }
 
-#preview {
-  background: linear-gradient(90deg, var(--c1,#ff004c), var(--c2,#00ffff));
-  background-size: 400%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: colorShift 6s linear infinite;
+textarea {
+  height: 90px;
+  resize: vertical;
 }
-@keyframes colorShift { to { background-position: 400% 0; } }
 
-@keyframes vibrate {
-  0%,100% { transform: translate(0,0) scaleY(var(--scaleY,1)); }
-  25% { transform: translate(var(--vib), calc(var(--vib)*-1)) scaleY(var(--scaleY,1)); }
-  50% { transform: translate(calc(var(--vib)*-1), var(--vib)) scaleY(var(--scaleY,1)); }
-  75% { transform: translate(var(--vib), var(--vib)) scaleY(var(--scaleY,1)); }
+#previewContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
 }
-#preview { animation-name: colorShift, vibrate; animation-duration: var(--speed,6s), 0.08s; animation-iteration-count: infinite, infinite; animation-timing-function: linear, steps(4,end); }
+
+#toggleGradient {
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 6px;
+  background-color: #555; /* gris par défaut */
+  color: black;           /* texte sombre par défaut */
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#toggleGradient.active {
+  background-color: #fff; /* blanc quand activé */
+  color: black;           /* texte noir quand activé */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
