@@ -6,13 +6,16 @@
   <title>TextERA</title>
 
   <link rel="stylesheet" type="text/css" href="style.css" />
+
+  <!-- Roboto Flex -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100..900&display=swap" rel="stylesheet" />
 
   <!-- P5.js -->
   <script src="libraries/p5.js"></script>
-    <script src="libraries/p5.sound.min.js"></script>
+  <script src="libraries/p5.sound.min.js"></script>
   <script src="sketch.js" defer></script>
 </head>
+
 <body>
 
   <div id="previewContainer"></div>
@@ -20,66 +23,69 @@
   <div class="panel">
     <h2>TextERA</h2>
 
-    <label for="inputText">Texte :</label>
+    <label>Texte :</label>
     <textarea id="inputText">Hello World</textarea>
 
-    <label for="fontSize">Taille police :</label>
+    <label>Taille police :</label>
     <input type="range" id="fontSize" min="10" max="200" value="64">
 
-    <label for="colorText">Couleur texte :</label>
+    <label>Couleur texte :</label>
     <input type="color" id="colorText" value="#ffffff">
 
-    <label for="colorBG">Couleur fond :</label>
+    <label>Couleur fond :</label>
     <input type="color" id="colorBG" value="#000000">
 
-    <label for="textX">Décalage X :</label>
+    <label>Décalage X :</label>
     <input type="range" id="textX" min="-600" max="600" value="0">
 
-    <label for="textY">Décalage Y :</label>
+    <label>Décalage Y :</label>
     <input type="range" id="textY" min="-400" max="400" value="0">
 
-    <label for="lineSpacing">Interligne :</label>
+    <button id="toggleBrush">Activer Brush</button>
+
+    <label>Interligne :</label>
     <input type="range" id="lineSpacing" min="0.5" max="3" step="0.05" value="1.2">
 
-    <label for="weight">Graisse (wght) :</label>
+    <label>Graisse :</label>
     <input type="range" id="weight" min="100" max="900" value="400">
 
-    <label for="tracking">Tracking :</label>
-    <input type="range" id="tracking" min="0" max="1" step="0.01" value="0.25">    
+    <label>Tracking :</label>
+    <input type="range" id="tracking" min="0.5" max="1.5" step="0.01" value="0.52" />
+
+    <label>Éclatement :</label>
+    <input type="range" id="spread" min="0" max="200" step="1" value="0" />
 
     <button id="toggleGradient">Activer/Désactiver Dégradé</button>
 
-    <label for="color1">Couleur 1 :</label>
+    <label>Couleur 1 :</label>
     <input type="color" id="color1" value="#ff00ff">
 
-    <label for="color2">Couleur 2 :</label>
+    <label>Couleur 2 :</label>
     <input type="color" id="color2" value="#00ffff">
 
-    <label for="speed">Vitesse animation :</label>
-    <input type="range" id="speed" min="0.1" max="10" step="0.1" value="3">
+    <label>Vitesse animation :</label>
+    <input type="range" id="speed" min="0" max="10" step="0.1" value="3">
 
-    <label for="blur">Flou :</label>
+    <label>Flou :</label>
     <input type="range" id="blur" min="0" max="20" value="0">
 
-    <label for="vibration">Vibration :</label>
-    <input type="range" id="vibration" min="0" max="30" value="0">
-
-    <label for="scaleY">Étirement vertical :</label>
+    <label>Étirement vertical :</label>
     <input type="range" id="scaleY" min="0.2" max="4" step="0.05" value="1">
 
-    <label for="fontSelect">Police :</label>
+    <label>Police :</label>
     <select id="fontSelect">
-      <option value="'Roboto Flex', sans-serif">Roboto Flex</option>
-      <option value="'Arial', sans-serif">Arial</option>
-      <option value="'Times New Roman', serif">Times</option>
+      <option value="Roboto Flex">Roboto Flex</option>
+      <option value="Arial">Arial</option>
+      <option value="Times New Roman">Times</option>
     </select>
 
-    <label for="textAlign">Alignement :</label>
+    <label>Alignement :</label>
     <select id="textAlign">
       <option value="CENTER">CENTRÉ</option>
-      <option value="LEFT">DROITE</option>
-      <option value="RIGHT">GAUCHE</option>
+      <option value="LEFT">GAUCHE</option>
+      <option value="RIGHT">DROITE</option>
     </select>
+
   </div>
 
 </body>

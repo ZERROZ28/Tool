@@ -4,15 +4,19 @@ body {
   color: white;
   margin: 0;
   display: flex;
+  height: 100vh; /* pour que flex fonctionne sur toute la fenêtre */
+  overflow: hidden; /* évite les scrollbars */
 }
 
 .panel {
   width: 320px;
   padding: 20px;
   background: #1c1c1c;
-  height: 100vh;
+  height: 100vh; /* plein hauteur */
   overflow-y: auto;
   border-right: 1px solid #333;
+  box-sizing: border-box;
+  flex-shrink: 0; /* ne pas rétrécir */
 }
 
 .panel label {
@@ -32,6 +36,7 @@ body {
   border: none;
   background: #2a2a2a;
   color: white;
+  box-sizing: border-box;
 }
 
 textarea {
@@ -40,30 +45,32 @@ textarea {
 }
 
 #previewContainer {
-  flex: 1;
+  flex: 1; /* prend toute la largeur restante */
   display: flex;
   align-items: center;
   justify-content: center;
   background: black;
+  height: 100vh; /* plein hauteur */
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-#toggleGradient {
+#toggleGradient, #toggleBrush {
   width: 100%;
   padding: 10px;
   margin-top: 15px;
   border: none;
   border-radius: 6px;
-  background-color: #555; /* gris par défaut */
-  color: black;           /* texte sombre par défaut */
+  background-color: #555;
+  color: black;
   font-size: 0.9rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-#toggleGradient.active {
-  background-color: #fff; /* blanc quand activé */
-  color: black;           /* texte noir quand activé */
+#toggleGradient.active, #toggleBrush.active {
+  background-color: #fff;
+  color: black;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
-
