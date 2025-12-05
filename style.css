@@ -55,7 +55,7 @@ textarea {
   overflow: hidden;
 }
 
-#toggleGradient, #toggleBrush {
+#toggleBrush {
   width: 100%;
   padding: 10px;
   margin-top: 15px;
@@ -69,7 +69,7 @@ textarea {
   transition: all 0.3s ease;
 }
 
-#toggleGradient.active, #toggleBrush.active {
+#toggleBrush.active {
   background-color: #fff;
   color: black;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);

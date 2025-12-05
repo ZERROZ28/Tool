@@ -1,18 +1,16 @@
 let inputText, fontSize, colorText, colorBG;
-let textX, textY, lineSpacing, textAlignSel;
-let weight, tracking, color1, color2, speed;
-let blurSlider, scaleYInput, fontSelect, spreadSlider;
+let textX, textY, lineSpacing;
+let weight, tracking, blurSlider, scaleYInput, fontSelect, spreadSlider;
 
 let scaleYValue = 1;
 let selectedFont = "Roboto Flex";
-let gradientActive = false;
 let brushActive = false;
 
 let letters = []; // lettres du texte principal
 
 function setup() {
   let preview = select("#previewContainer");
-  let canvas = createCanvas(preview.width, windowHeight);
+  let canvas = createCanvas(preview.width || windowWidth, windowHeight);
   canvas.parent("previewContainer");
 
   // DOM
@@ -23,12 +21,8 @@ function setup() {
   textX = select("#textX");
   textY = select("#textY");
   lineSpacing = select("#lineSpacing");
-  textAlignSel = select("#textAlign");
   weight = select("#weight");
   tracking = select("#tracking");
-  color1 = select("#color1");
-  color2 = select("#color2");
-  speed = select("#speed");
   blurSlider = select("#blur");
   scaleYInput = select("#scaleY");
   fontSelect = select("#fontSelect");
@@ -36,15 +30,17 @@ function setup() {
 
   textFont(selectedFont);
 
-  // Listeners : à chaque changement, on redessine le texte principal
-  inputText.input(drawMainText);
-  fontSize.input(drawMainText);
-  tracking.input(drawMainText);
-  weight.input(drawMainText);
-  lineSpacing.input(drawMainText);
-  spreadSlider.input(drawMainText);
-  scaleYInput.input(drawMainText);
+  // Listeners : redessiner le texte à chaque changement
+  inputText.input(() => { rebuildLetters(); drawMainText(); });
+  fontSize.input(() => { rebuildLetters(); drawMainText(); });
+  tracking.input(() => { rebuildLetters(); drawMainText(); });
+  weight.input(() => { rebuildLetters(); drawMainText(); });
+  lineSpacing.input(() => { rebuildLetters(); drawMainText(); });
+  spreadSlider.input(() => { rebuildLetters(); drawMainText(); });
+  scaleYInput.input(() => { scaleYValue = Number(scaleYInput.value()); drawMainText(); });
   fontSelect.input(() => { selectedFont = fontSelect.value(); textFont(selectedFont); drawMainText(); });
+  textX.input(() => { rebuildLetters(); drawMainText(); });
+  textY.input(() => { rebuildLetters(); drawMainText(); });
 
   // Brush Button
   let toggleBrushBtn = select("#toggleBrush");
@@ -55,17 +51,11 @@ function setup() {
     });
   }
 
-  // Gradient Button
-  let gradientBtn = select("#toggleGradient");
-  if(gradientBtn){
-    gradientBtn.mousePressed(() => gradientActive = !gradientActive);
-  }
-
   rebuildLetters();
-  drawMainText(); // dessine le texte initial une première fois
+  drawMainText(); // dessine le texte initial
 }
 
-// Construit la position des lettres
+// Construit la position des lettres avec éclatement aléatoire
 function rebuildLetters() {
   letters = [];
   let txt = inputText.value();
@@ -78,7 +68,6 @@ function rebuildLetters() {
   let spread = Number(spreadSlider.value() || 0);
 
   let lines = txt.split("\n");
-  let align = textAlignSel.value() === "LEFT" ? LEFT : textAlignSel.value() === "RIGHT" ? RIGHT : CENTER;
 
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
@@ -86,20 +75,21 @@ function rebuildLetters() {
 
     let charSpacing = fs * track + boldFactor * 1.8;
     let totalWidth = (line.length - 1) * charSpacing;
-    let baseX = 0;
-    if(align === CENTER) baseX = -totalWidth / 2;
-    else if(align === RIGHT) baseX = -totalWidth;
+    let baseX = -totalWidth / 2; // centré horizontalement
 
     let xCursor = baseX;
 
     for (let j = 0; j < line.length; j++) {
       let ch = line[j];
-      let sx = map(j, 0, line.length - 1, -spread, spread);
+
+      // Éclatement aléatoire
+      let sx = random(-spread, spread);
+      let sy = random(-spread, spread);
 
       letters.push({
         char: ch,
-        x: width / 2 + offsetX + xCursor + sx + random(-2,2),
-        y: height / 2 + offsetY + yLine + random(-2,2),
+        x: width / 2 + offsetX + xCursor + sx,
+        y: height / 2 + offsetY + yLine + sy,
       });
 
       xCursor += charSpacing;
@@ -107,10 +97,9 @@ function rebuildLetters() {
   }
 }
 
-// Dessine le texte initial UNE seule fois (réactif aux mutateurs)
+// Dessine le texte principal
 function drawMainText() {
   if(!colorBG) return;
-  // Dessine le fond une fois
   background(color(colorBG.value()));
 
   let fs = Number(fontSize.value());
@@ -121,18 +110,11 @@ function drawMainText() {
     textSize(fs);
     textStyle(BOLD);
     textAlign(CENTER, CENTER);
-
-    if(gradientActive){
-      let c1 = color(color1.value());
-      let c2 = color(color2.value());
-      fill(lerpColor(c1, c2, random()));
-    } else {
-      fill(color(colorText.value()));
-    }
+    fill(color(colorText.value()));
 
     if(blurVal > 0){
       drawingContext.shadowBlur = blurVal * 2;
-      drawingContext.shadowColor = getFillColor().toString();
+      drawingContext.shadowColor = color(colorText.value()).toString();
     } else {
       drawingContext.shadowBlur = 0;
     }
@@ -144,13 +126,13 @@ function drawMainText() {
   }
 }
 
-// Draw ne dessine que le brush
+// Draw pour le brush animé autour de la souris
 function draw() {
   if(brushActive && frameCount % 2 === 0){
     let fs = Number(fontSize.value());
     let blurVal = Number(blurSlider.value());
 
-    // Centre du texte
+    // Calcul centre du texte
     let centerX = 0, centerY = 0;
     for (let l of letters){
       centerX += l.x;
@@ -171,17 +153,11 @@ function drawLetterBrush(l, fs, blurVal, centerX, centerY){
   textStyle(BOLD);
   textAlign(CENTER, CENTER);
 
-  if(gradientActive){
-    let c1 = color(color1.value());
-    let c2 = color(color2.value());
-    fill(lerpColor(c1, c2, random()));
-  } else {
-    fill(color(colorText.value()));
-  }
+  fill(color(colorText.value()));
 
   if(blurVal > 0){
     drawingContext.shadowBlur = blurVal * 2;
-    drawingContext.shadowColor = getFillColor().toString();
+    drawingContext.shadowColor = color(colorText.value()).toString();
   } else {
     drawingContext.shadowBlur = 0;
   }
@@ -205,13 +181,9 @@ function drawLetterBrush(l, fs, blurVal, centerX, centerY){
   pop();
 }
 
-function getFillColor(){
-  return gradientActive ? lerpColor(color(color1.value()), color(color2.value()), random()) : color(colorText.value());
-}
-
 function windowResized(){
   let preview = select("#previewContainer");
-  resizeCanvas(preview.width, windowHeight);
+  resizeCanvas(preview.width || windowWidth, windowHeight);
   rebuildLetters();
-  drawMainText(); // redraw texte initial après resize
+  drawMainText();
 }
