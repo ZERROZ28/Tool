@@ -11,8 +11,12 @@ let textBuffer;
 let brushBuffer;
 
 function setup() {
-  let preview = select("#previewContainer");
-  let canvas = createCanvas(preview.width || windowWidth, windowHeight);
+  // largeur du canvas = largeur fenêtre - largeur panneau
+  let panel = select(".panel");
+  let canvasWidth = panel ? windowWidth - panel.width : windowWidth;
+  let canvasHeight = windowHeight;
+
+  let canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.parent("previewContainer");
 
   // Buffers
@@ -88,7 +92,7 @@ function rebuildLetters() {
 }
 
 function draw() {
-  // Redessine le texte
+  // Redessine le texte principal
   drawMainText();
 
   // Dessine le buffer brush par-dessus
@@ -169,10 +173,14 @@ function drawLetterBrush(l, fs, blurVal, cx, cy, col){
 }
 
 function windowResized(){
-  let preview = select("#previewContainer");
-  resizeCanvas(preview.width || windowWidth, windowHeight);
+  let panel = select(".panel");
+  let canvasWidth = panel ? windowWidth - panel.width : windowWidth;
+  let canvasHeight = windowHeight;
+
+  resizeCanvas(canvasWidth, canvasHeight);
   textBuffer.resizeCanvas(width,height);
   brushBuffer.resizeCanvas(width,height);
   brushBuffer.clear();
+
   rebuildLetters();
 }
