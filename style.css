@@ -79,14 +79,43 @@ textarea {
   position: absolute;
   bottom: 20px;
   right: 350px;
+
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  padding: 12px;
+  background: #1c1c1c;
+  border-radius: 10px;
+  border: 1px solid #333;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   z-index: 10;
 }
 
+
 #leftTools button {
-  padding: 8px 12px;
-  font-size: 14px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  background: #2a2a2a;
+  color: white;
+
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
+
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
+
+#leftTools button:hover {
+  background: #3a3a3a;
+  transform: translateY(-1px);
+}
+
+#leftTools button:active {
+  transform: translateY(0);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.6);
+}
+

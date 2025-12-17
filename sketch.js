@@ -7,11 +7,18 @@ let selectedFont = "Roboto Flex";
 let brushActive = false;
 
 let letters = [];
+let textBuffer;
+let brushBuffer;
 
 function setup() {
   let preview = select("#previewContainer");
   let canvas = createCanvas(preview.width || windowWidth, windowHeight);
   canvas.parent("previewContainer");
+
+  // Buffers
+  textBuffer = createGraphics(width, height);
+  brushBuffer = createGraphics(width, height);
+  brushBuffer.clear();
 
   // DOM
   inputText = select("#inputText");
@@ -29,24 +36,13 @@ function setup() {
 
   textFont(selectedFont);
 
-  // Listeners
-  inputText.input(() => { rebuildLetters(); drawMainText(); });
-  fontSize.input(() => { rebuildLetters(); drawMainText(); });
-  tracking.input(() => { rebuildLetters(); drawMainText(); });
-  weight.input(() => { rebuildLetters(); drawMainText(); });
-  spreadSlider.input(() => { rebuildLetters(); drawMainText(); });
-  scaleYInput.input(() => {
-    scaleYValue = Number(scaleYInput.value());
-    drawMainText();
-  });
-  fontSelect.input(() => {
-    selectedFont = fontSelect.value();
-    textFont(selectedFont);
-    rebuildLetters();
-    drawMainText();
-  });
-  textX.input(() => { rebuildLetters(); drawMainText(); });
-  textY.input(() => { rebuildLetters(); drawMainText(); });
+  // Listeners : mise à jour des valeurs seulement
+  [
+    inputText, fontSize, tracking, weight, spreadSlider, textX, textY
+  ].forEach(el => el.input(rebuildLetters));
+
+  scaleYInput.input(() => scaleYValue = Number(scaleYInput.value()));
+  fontSelect.input(() => { selectedFont = fontSelect.value(); textFont(selectedFont); rebuildLetters(); });
 
   // Brush toggle
   let toggleBrushBtn = select("#toggleBrush");
@@ -58,29 +54,16 @@ function setup() {
   }
 
   // Save buttons
-  let savePNGBtn = select("#savePNG");
-  let saveJPGBtn = select("#saveJPG");
-
-  if (savePNGBtn) {
-    savePNGBtn.mousePressed(() => saveCanvas("TextERA_export", "png"));
-  }
-
-  if (saveJPGBtn) {
-    saveJPGBtn.mousePressed(() => saveCanvas("TextERA_export", "jpg"));
-  }
+  select("#savePNG")?.mousePressed(() => saveCanvas("TextERA_export","png"));
+  select("#saveJPG")?.mousePressed(() => saveCanvas("TextERA_export","jpg"));
 
   rebuildLetters();
-  drawMainText();
 }
 
-// =======================================================
-// BUILD LETTERS (SINGLE LINE ONLY)
-// =======================================================
 function rebuildLetters() {
   letters = [];
-
-  let txt = inputText.value().replace(/\n/g, "");
-  if (txt.length === 0) return;
+  let txt = inputText.value().replace(/\n/g,"");
+  if (!txt) return;
 
   let fs = Number(fontSize.value());
   let offsetX = Number(textX.value());
@@ -94,118 +77,102 @@ function rebuildLetters() {
   let baseX = -totalWidth / 2;
 
   let xCursor = baseX;
-
-  for (let i = 0; i < txt.length; i++) {
-    let sx = random(-spread, spread);
-    let sy = random(-spread, spread);
-
+  for (let i=0;i<txt.length;i++){
     letters.push({
       char: txt[i],
-      x: width / 2 + offsetX + xCursor + sx,
-      y: height / 2 + offsetY + sy,
+      x: width/2 + offsetX + xCursor + random(-spread, spread),
+      y: height/2 + offsetY + random(-spread, spread)
     });
-
     xCursor += charSpacing;
   }
 }
 
-// =======================================================
-// DRAW MAIN TEXT
-// =======================================================
-function drawMainText() {
-  if (!colorBG) return;
+function draw() {
+  // Redessine le texte
+  drawMainText();
 
+  // Dessine le buffer brush par-dessus
+  image(brushBuffer, 0, 0);
+
+  // Ajoute de nouvelles lettres au brush si activé
+  if(brushActive && letters.length > 0 && frameCount % 2 === 0){
+    let fs = Number(fontSize.value());
+    let blurVal = Number(blurSlider.value());
+    let col = color(colorText.value());
+
+    let centerX = letters.reduce((acc,l)=>acc+l.x,0)/letters.length;
+    let centerY = letters.reduce((acc,l)=>acc+l.y,0)/letters.length;
+
+    for (let l of letters){
+      drawLetterBrush(l, fs, blurVal, centerX, centerY, col);
+    }
+  }
+}
+
+function drawMainText(){
   background(color(colorBG.value()));
 
-  let fs = Number(fontSize.value());
-  let blurVal = Number(blurSlider.value());
-
-  for (let l of letters) {
-    push();
-    textSize(fs);
-    textStyle(BOLD);
-    textAlign(CENTER, CENTER);
-    fill(color(colorText.value()));
-
-    if (blurVal > 0) {
-      drawingContext.shadowBlur = blurVal * 2;
-      drawingContext.shadowColor = color(colorText.value()).toString();
-    } else {
-      drawingContext.shadowBlur = 0;
-    }
-
-    scale(1, scaleYValue);
-    noStroke();
-    text(l.char, l.x, l.y);
-    pop();
-  }
-}
-
-// =======================================================
-// BRUSH MODE
-// =======================================================
-function draw() {
-  if (!brushActive || letters.length === 0) return;
-  if (frameCount % 2 !== 0) return;
+  textBuffer.clear();
+  textBuffer.textFont(selectedFont);
+  textBuffer.textAlign(CENTER, CENTER);
+  textBuffer.textStyle(BOLD);
 
   let fs = Number(fontSize.value());
   let blurVal = Number(blurSlider.value());
+  let col = color(colorText.value());
 
-  let centerX = 0;
-  let centerY = 0;
-
-  for (let l of letters) {
-    centerX += l.x;
-    centerY += l.y;
+  for (let l of letters){
+    textBuffer.push();
+    textBuffer.translate(l.x,l.y);
+    textBuffer.scale(1, scaleYValue);
+    textBuffer.textSize(fs);
+    textBuffer.fill(col);
+    textBuffer.noStroke();
+    textBuffer.text(l.char,0,0);
+    textBuffer.pop();
   }
 
-  centerX /= letters.length;
-  centerY /= letters.length;
-
-  for (let l of letters) {
-    drawLetterBrush(l, fs, blurVal, centerX, centerY);
+  if (blurVal>0){
+    textBuffer.filter(BLUR, blurVal);
   }
+
+  image(textBuffer,0,0);
 }
 
-function drawLetterBrush(l, fs, blurVal, centerX, centerY) {
-  push();
-  textSize(fs);
-  textStyle(BOLD);
-  textAlign(CENTER, CENTER);
-  fill(color(colorText.value()));
+function drawLetterBrush(l, fs, blurVal, cx, cy, col){
+  let dx = l.x-cx;
+  let dy = l.y-cy;
+  let a = frameCount*0.02;
+  let x = dx*cos(a)-dy*sin(a);
+  let y = dx*sin(a)+dy*cos(a);
 
-  if (blurVal > 0) {
-    drawingContext.shadowBlur = blurVal * 2;
-    drawingContext.shadowColor = color(colorText.value()).toString();
-  } else {
-    drawingContext.shadowBlur = 0;
+  brushBuffer.push();
+  brushBuffer.translate(mouseX+x, mouseY+y);
+  brushBuffer.scale(1, scaleYValue);
+
+  brushBuffer.textSize(fs);
+  brushBuffer.textStyle(BOLD);
+  brushBuffer.textAlign(CENTER,CENTER);
+
+  if(blurVal>0){
+    brushBuffer.drawingContext.filter = `blur(${blurVal}px)`;
+    brushBuffer.fill(col);
+    brushBuffer.text(l.char,0,0);
   }
 
-  scale(1, scaleYValue);
-
-  stroke(0);
-  strokeWeight(2);
-
-  let dx = l.x - centerX;
-  let dy = l.y - centerY;
-
-  let angle = frameCount * 0.02;
-  let cosA = cos(angle);
-  let sinA = sin(angle);
-
-  let xRot = dx * cosA - dy * sinA;
-  let yRot = dx * sinA + dy * cosA;
-
-  text(l.char, mouseX + xRot, mouseY + yRot);
-  pop();
+  brushBuffer.drawingContext.filter = "none";
+  brushBuffer.stroke(0);
+  brushBuffer.strokeWeight(2);
+  brushBuffer.fill(col);
+  brushBuffer.text(l.char,0,0);
+  brushBuffer.pop();
 }
 
-// =======================================================
-// RESIZE
-// =======================================================
-function windowResized() {
+function windowResized(){
   let preview = select("#previewContainer");
   resizeCanvas(preview.width || windowWidth, windowHeight);
+  textBuffer.resizeCanvas(width,height);
+  brushBuffer.resizeCanvas(width,height);
+  brushBuffer.clear();
   rebuildLetters();
-  drawMainText();
 }
