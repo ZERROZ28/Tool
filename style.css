@@ -62,7 +62,7 @@ textarea {
   border: none;
   border-radius: 6px;
   background-color: #555;
-  color: black;
+  color: rgb(255, 255, 255);
   font-size: 0.9rem;
   font-weight: bold;
   cursor: pointer;
