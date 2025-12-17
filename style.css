@@ -74,3 +74,19 @@ textarea {
   color: black;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
+
+#leftTools {
+  position: absolute;
+  bottom: 20px;
+  right: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
+}
+
+#leftTools button {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}

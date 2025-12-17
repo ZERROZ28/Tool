@@ -51,6 +51,22 @@ function setup() {
     });
   }
 
+  // ✅ AJOUT : Boutons de sauvegarde
+  let savePNGBtn = select("#savePNG");
+  let saveJPGBtn = select("#saveJPG");
+
+  if (savePNGBtn) {
+    savePNGBtn.mousePressed(() => {
+      saveCanvas('TextERA_export', 'png');
+    });
+  }
+
+  if (saveJPGBtn) {
+    saveJPGBtn.mousePressed(() => {
+      saveCanvas('TextERA_export', 'jpg');
+    });
+  }
+
   rebuildLetters();
   drawMainText(); // dessine le texte initial
 }
